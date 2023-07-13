@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox prefHeight="480.0" prefWidth="340.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.chat39.HelloController">
+    <VBox/>
+    <VBox alignment="CENTER">
+        <TextArea fx:id="messageBox" editable="false" prefHeight="350.0" prefWidth="Infinity" />
+        <HBox prefHeight="50" prefWidth="Infinity">
+            <TextField fx:id="inputMessage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onSendMessage" prefHeight="25.0" prefWidth="258.0" />
+            <Button onAction="#onSendMessage" text="Отправить!" />
+        </HBox>
+        <Button onAction="#connect" prefHeight="25.0" prefWidth="Infinity" text="Подключится к серверу"/>
+    </VBox>
+</HBox>
