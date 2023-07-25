@@ -1,8 +1,11 @@
 package com.example.chat39;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,6 +21,8 @@ public class HelloController {
     private TextArea messageBox;
     @FXML
     private TextField inputMessage;
+    @FXML
+    private VBox usersBox;
     private DataOutputStream out;
 
     @FXML
@@ -44,13 +49,26 @@ public class HelloController {
                     try {
                         String response;
                         while (true) {
-                            response = is.readUTF();
+                            response = is.readUTF(); // "Hello" "{msg: 'hello'}"
                             JSONParser jsonParser = new JSONParser();
                             try {
                                 JSONObject jsonObject = (JSONObject) jsonParser.parse(response);
-                                JSONArray jsonArray = (JSONArray) jsonObject.get("onlineusers");
+                                JSONArray jsonArray = (JSONArray) jsonObject.get("onlineUsers");
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        usersBox.getChildren().clear();
+                                        for (int i = 0; i < jsonArray.size(); i++) {
+                                            String userName = (String) jsonArray.get(i);
+                                            Button userBtn = new Button();
+                                            userBtn.setText(userName);
+                                            usersBox.getChildren().add(userBtn);
+                                        }
+                                    }
+                                });
+
                                 messageBox.appendText(jsonArray.toJSONString());
-                            }catch (ParseException e) {
+                            } catch (ParseException e) {
                                 messageBox.appendText(response + "\n");
                             }
 
@@ -59,10 +77,12 @@ public class HelloController {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
                 }
             });
             thread.start();
         } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
