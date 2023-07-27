@@ -24,14 +24,19 @@ public class HelloController {
     @FXML
     private VBox usersBox;
     private DataOutputStream out;
+    private int toUser = 0; // отправить всем
 
     @FXML
     protected void onSendMessage() {
+        JSONObject jsonObject = new JSONObject();
+
         String msg = inputMessage.getText();
         messageBox.appendText(msg + "\n");
         inputMessage.clear();
+        jsonObject.put("msg", msg);
+        jsonObject.put("toUser", msg);
         try {
-            out.writeUTF(msg);
+            out.writeUTF(jsonObject.toJSONString()); // {msg: "/login",toUser:0}
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
